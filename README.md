@@ -235,15 +235,3 @@ CREATE TABLE locations (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
-
-## ⚠️ Error Handling
-
-The API returns appropriate HTTP status codes:
-
-- `200 OK` - Successful requests
-- `201 Created` - Location created successfully
-- `400 Bad Request` - Invalid input data or coordinates
-- `404 Not Found` - Location not found
-- `409 Conflict` - Duplicate location name
-- `500 Internal Server Error` - Server errors
-
