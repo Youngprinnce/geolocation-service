@@ -69,9 +69,12 @@ curl http://localhost:8080/
 
 #### Option 1: Local Development
 ```bash
-# Make sure you have PostgreSQL running locally
-# The app will automatically run migrations
+# 1. Set up PostgreSQL database locally:
+#    - Install PostgreSQL
+#    - Create database: createdb geolocation_db
+#    - Update config-local.yaml with your database credentials
 
+# 2. Run the application (auto-migrations will run)
 make run
 ```
 
@@ -83,15 +86,15 @@ make docker-up
 
 ### 📋 Configuration
 
-The app uses `config.yaml` for configuration. For Docker Compose, no changes needed.
-For local development, ensure your `config.yaml` has:
+The app uses `config.yaml` for Docker Compose (no changes needed).
+For local development, update `config-local.yaml` with your database details:
 
 ```yaml
 database:
-  host: "localhost"  # or "postgres" for Docker
-  port: 5433
-  user: "postgres"
-  password: "admin"
+  host: "localhost"
+  port: 5432
+  user: "your_postgres_user"
+  password: "your_postgres_password"
   db_name: "geolocation_db"
 ```
 
@@ -182,54 +185,6 @@ make test
 go test ./... -v
 ```
 
-### Run Specific Test Suites
-```bash
-# Test distance calculations
-go test ./internal/service/location -v
-
-# Test HTTP handlers
-go test ./internal/http -v
-```
-
-### API Integration Testing
-
-Since the README contains comprehensive curl command examples above, you can easily test all endpoints manually using those commands.
-
-## 🏗 Project Structure
-
-```
-.
-├── main.go                          # Application entry point
-├── config.yaml                      # Configuration file
-├── config-local.yaml                # Local development configuration
-├── Dockerfile                       # Docker configuration
-├── docker-compose.yml               # Docker Compose setup
-├── Makefile                         # Build and run commands
-├── cmd/
-│   ├── root.go                      # CLI root command
-│   └── server/
-│       ├── app.go                   # Route configuration and middleware
-│       └── server.go                # Server command
-├── config/
-│   └── config.go                    # Configuration loader
-├── internal/
-│   ├── http/
-│   │   ├── location.go              # Location HTTP controllers
-│   │   └── location_test.go         # HTTP handler tests
-│   ├── logger/
-│   │   └── logger.go                # Logging utilities
-│   ├── postgres/
-│   │   └── postgres.go              # Database connection with auto-migration
-│   └── service/
-│       ├── service.go               # Common service utilities
-│       └── location/
-│           ├── location.go          # Location models and distance calculator
-│           ├── service.go           # Business logic layer
-│           ├── service_test.go      # Business logic tests
-│           └── store.go             # Database operations
-└── go.mod                           # Go module definition
-```
-
 ## 🎯 Architecture
 
 This project follows clean architecture principles:
@@ -248,28 +203,6 @@ This project follows clean architecture principles:
 - **Business Services**: Domain logic implementation in `internal/service/`
 - **Data Stores**: Database access layer with interface abstraction
 - **Models**: Data structures and domain entities
-
-## 🔧 Configuration
-
-The application uses YAML configuration files:
-
-```yaml
-# config.yaml
-database:
-  host: localhost
-  port: 5432
-  user: postgres
-  password: password
-  dbname: geolocation_db
-  sslmode: disable
-
-server:
-  port: 8080
-  host: 0.0.0.0
-
-logging:
-  level: info
-```
 
 ## 📊 Distance Calculation
 
@@ -305,39 +238,3 @@ The API returns appropriate HTTP status codes:
 - `409 Conflict` - Duplicate location name
 - `500 Internal Server Error` - Server errors
 
-### Validation Rules
-
-- **Latitude**: Must be between -90 and 90 degrees
-- **Longitude**: Must be between -180 and 180 degrees  
-- **Name**: Must be unique and non-empty
-
-## 🛠 Available Commands
-
-```bash
-# Run the application locally
-make run
-
-# Run tests
-make test
-
-# Run application using Docker Compose
-make docker-up
-```
-
-## 🏆 Assessment Compliance
-
-This implementation fully satisfies all the requirements:
-
-✅ **RESTful API** with all 4 required endpoints  
-✅ **Input validation** with proper error handling  
-✅ **Haversine formula** for distance calculations  
-✅ **PostgreSQL** database persistence  
-✅ **Standard Go project structure**  
-✅ **Comprehensive unit tests** for logic and HTTP handlers  
-✅ **Docker setup** for easy deployment  
-✅ **Structured logging** with appropriate levels  
-✅ **Clean, idiomatic Go code** with proper separation of concerns  
-
-## 📞 Support
-
-For questions or issues, please refer to the API examples and curl commands provided above.
