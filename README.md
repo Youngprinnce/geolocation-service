@@ -6,7 +6,7 @@ A RESTful API in Golang that allows users to register geolocated stations and qu
 
 - **POST /locations** - Register new geolocated stations
 - **GET /locations** - Get all registered locations
-- **GET /nearest?lat=LAT&lng=LNG** - Find nearest station to given coordinates
+- **GET /locations/nearest?lat=LAT&lng=LNG** - Find nearest station to given coordinates
 - **DELETE /locations/{name}** - Delete station by name
 - Uses **Haversine formula** for accurate distance calculations
 - **PostgreSQL** database for persistence
@@ -101,21 +101,23 @@ database:
 ## 📚 API Usage Examples
 
 ### 1. Register a New Location
+
 ```bash
 curl -X POST http://localhost:8080/locations \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Central Station",
+    "name": "CentralStation",
     "latitude": 40.7128,
     "longitude": -74.0060
   }'
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": 1,
-  "name": "Central Station",
+  "name": "CentralStation",
   "latitude": 40.7128,
   "longitude": -74.0060,
   "created_at": "2025-01-28T10:00:00Z",
@@ -124,16 +126,18 @@ curl -X POST http://localhost:8080/locations \
 ```
 
 ### 2. Get All Locations
+
 ```bash
 curl http://localhost:8080/locations
 ```
 
 **Response (200 OK):**
+
 ```json
 [
   {
     "id": 1,
-    "name": "Central Station",
+    "name": "CentralStation",
     "latitude": 40.7128,
     "longitude": -74.0060,
     "created_at": "2025-01-28T10:00:00Z",
@@ -143,16 +147,18 @@ curl http://localhost:8080/locations
 ```
 
 ### 3. Find Nearest Location
+
 ```bash
-curl "http://localhost:8080/nearest?lat=40.7589&lng=-73.9851"
+curl "http://localhost:8080/locations/nearest?lat=40.7589&lng=-73.9851"
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "location": {
     "id": 1,
-    "name": "Central Station",
+    "name": "CentralStation",
     "latitude": 40.7128,
     "longitude": -74.0060,
     "created_at": "2025-01-28T10:00:00Z",
@@ -163,11 +169,13 @@ curl "http://localhost:8080/nearest?lat=40.7589&lng=-73.9851"
 ```
 
 ### 4. Delete a Location
+
 ```bash
-curl -X DELETE "http://localhost:8080/locations/Central Station"
+curl -X DELETE "http://localhost:8080/locations/CentralStation"
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Location deleted successfully"
@@ -177,6 +185,7 @@ curl -X DELETE "http://localhost:8080/locations/Central Station"
 ## 🧪 Testing
 
 ### Run All Tests
+
 ```bash
 # Run all tests
 make test
@@ -208,7 +217,7 @@ This project follows clean architecture principles:
 
 The service uses the **Haversine formula** to calculate distances between coordinates:
 
-```
+```text
 distance = 2 * R * arcsin(sqrt(sin²((lat2-lat1)/2) + cos(lat1) * cos(lat2) * sin²((lng2-lng1)/2)))
 ```
 
